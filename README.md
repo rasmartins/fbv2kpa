@@ -18,8 +18,8 @@ protocol and full-duplex RS485 instead of MIDI.
 In the following sections I present a reasonably inexpensive solution to
 create a hardware/software converter to allow the foot controller to
 interface with the Kemper Profiler. Most of the hardware I used was lying
-around at my house gathering dust and this project seem to be a good one
-to use them and learn a few things in the process.
+around gathering dust and this project seem to be a good one to use them
+and learn a few things in the process.
 
 # Hardware Used
 
