@@ -7,3 +7,7 @@
 * [Olimex STM32-E407](https://www.olimex.com/Products/ARM/ST/STM32-E407/open-source-hardware)
 
 ![SparkFun RJ45 Breakout Pin Numbers](doc/images/SparkFunRj45Breakout.jpg?raw=true "SparkFun RJ45 Breakout Pin Numbers")
+
+| Pin Number    | Function      |
+| ------------- |:-------------:|
+| 1             | TX+ / Y       |
