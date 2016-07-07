@@ -1,16 +1,36 @@
 # Introduction
 
-I recently bought a [Kemper Profiler](https://www.kemper-amps.com/profiler/overview)
+I'm not a particulary versatile guitar player and my needs on stage are
+quite simple. All I need is a small foot controller with some buttons and
+one expression pedal. The foot controller should be small enough that I
+can store it on my 6U rack when I'm done. If I can power it and
+communicate with it using only one cable even better.
 
-# Hardware
+After I purchased a
+[Kemper Profiler](https://www.kemper-amps.com/profiler/overview) I looked
+all over the Internet for an affordable foot controller that would meet my
+requirements. In this search I found the
+[Line 6 FBV Express™ MkII](http://line6.com/foot-controllers/fbv-express-mkii),
+which has all that I need but has the caveat that it cannot be connected
+directly to the Kemper Profiler as it uses a proprietary communication
+protocol and full-duplex RS485 instead of MIDI.
+
+In the following sections I present a reasonably inexpensive solution to
+create a hardware/software converter to allow the foot controller to
+interface with the Kemper Profiler. Most of the hardware I used was lying
+around at my house gathering dust and this project seem to be a good one
+to use them and learn a few things in the process.
+
+# Hardware Used
 
 * [SparkFun RJ45 Breakout](https://www.sparkfun.com/products/716)
 * [SparkFun RJ45 8-Pin Connector](https://www.sparkfun.com/products/643)
 * [Olimex MOD-RS485-ISO](https://www.olimex.com/Products/Modules/Interface/MOD-RS485-ISO)
 * [Olimex SHIELD-MIDI](https://www.olimex.com/Products/Duino/Shields/SHIELD-MIDI)
 * [Olimex STM32-E407](https://www.olimex.com/Products/ARM/ST/STM32-E407/open-source-hardware)
+* [Olimex ARM-USB-TINY-H](https://www.olimex.com/Products/ARM/JTAG/ARM-USB-TINY-H)
 
-## FBV Express™ MkII
+## Line 6 FBV Express™ MkII
 
 The FBV Express™ MkII uses a RJ45 connector for communication and
 power. The communication interface is full-duplex RS485 and the device can
