@@ -10,7 +10,6 @@ I recently bought a [Kemper Profiler](https://www.kemper-amps.com/profiler/overv
 * [Olimex SHIELD-MIDI](https://www.olimex.com/Products/Duino/Shields/SHIELD-MIDI)
 * [Olimex STM32-E407](https://www.olimex.com/Products/ARM/ST/STM32-E407/open-source-hardware)
 
-
 ## FBV Express™ MkII
 
 The FBV Express™ MkII uses a RJ45 connector for communication and
@@ -30,13 +29,26 @@ image:
 The pinout of the RJ45 connector from the host side is as follows:
 
 
-| Pin Number    | Function      |
-| ------------- |:-------------:|
-| 1             | RS485 TX+ / Y |
-| 2             | +9VDC         |
-| 3             | RS485 RX+ / A |
-| 4             | GND           |
-| 5             | +9VDC         |
-| 6             | GND           |
-| 7             | RS485 RX- / B |
-| 8             | RS485 TX- / Z |
+| Pin Number    | Function   |
+| ------------- |:----------:|
+| 1             | RS485 TX+  |
+| 2             | +9VDC      |
+| 3             | RS485 RX+  |
+| 4             | GND        |
+| 5             | +9VDC      |
+| 6             | GND        |
+| 7             | RS485 RX-  |
+| 8             | RS485 TX-  |
+
+### RS485 to TTL Conversion
+
+In order to use one MCU 3.3V UART to communicate with the floor controller
+we need an RS485 converter. The following table shows the correct
+connection:
+
+| SparkFun RJ45 8-Pin Connector | Olimex MOD-RS485-MIDI |
+| ----------------------------- |:---------------------:|
+| 1                             | Y                     |
+| 3                             | A                     |
+| 7                             | B                     |
+| 8                             | Z                     |
