@@ -34,7 +34,7 @@ The pinout of the RJ45 connector from the host side is as follows:
 | ------------- |:-------------:|
 | 1             | RS485 TX+ / Y |
 | 2             | +9VDC         |
-| 3             | TS485 RX+ / A |
+| 3             | RS485 RX+ / A |
 | 4             | GND           |
 | 5             | +9VDC         |
 | 6             | GND           |
