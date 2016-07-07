@@ -10,4 +10,11 @@
 
 | Pin Number    | Function      |
 | ------------- |:-------------:|
-| 1             | TX+ / Y       |
+| 1             | RS485 TX+ / Y |
+| 2             | +9VDC         |
+| 3             | TS485 RX+ / A |
+| 4             | GND           |
+| 5             | +9VDC         |
+| 6             | GND           |
+| 7             | RS485 RX- / B |
+| 8             | RS485 TX- / Z |
