@@ -96,6 +96,31 @@ public:
   }
 
   void
+  setTitle(const char* title)
+  {
+    m_tx_frame.setCommandCode(0x10);
+    m_tx_frame.setPayloadByte(0, 0x00);
+
+    int index = 0;
+    while (title[index] != '\0')
+    {
+      m_tx_frame.setPayloadByte(2 + index, title[index]);
+      ++index;
+    }
+
+    m_tx_frame.setPayloadByte(1, index + 1);
+    m_tx_frame.setPayloadLength(index + 3);
+
+
+    // for (int i = 0; i < 16; ++i)
+    // {
+    //   m_tx_frame.setPayloadByte(2 + i, title[i]);
+    // }
+
+    writeFrame();
+  }
+
+  void
   update(void)
   {
     uint8_t byte = 0;
@@ -133,22 +158,6 @@ public:
     }
   }
 
-  void
-  setTitle(const char* title)
-  {
-    m_tx_frame.setCommandCode(0x10);
-    m_tx_frame.setPayloadLength(18);
-    m_tx_frame.setPayloadByte(0, 0x00);
-    m_tx_frame.setPayloadByte(1, 16);
-
-    for (int i = 0; i < 16; ++i)
-    {
-      m_tx_frame.setPayloadByte(2 + i, title[i]);
-    }
-
-    writeFrame();
-  }
-
 
 private:
   const static uint8_t c_fbv_note_table[];
@@ -177,17 +186,17 @@ private:
   void
   writeFrame(void)
   {
-    dbg("W: ");
+    //    dbg("W: ");
 
     int frame_size = m_tx_frame.getFrameSize();
     const uint8_t* frame_data = m_tx_frame.getFrame();
 
     for (int i = 0; i < frame_size; ++i)
     {
-      dbg("%02X ", frame_data[i]);
+      //dbg("%02X ", frame_data[i]);
       m_uart.write(frame_data[i]);
     }
-    dbg("\r\n");
+    //dbg("\r\n");
   }
 
   void
@@ -209,6 +218,10 @@ private:
     unsigned btn = (btn_addr >> 4) - 2;
     unsigned value = m_rx_frame.getPayloadByte(1);
     dbg("fbv: button = %02X | %d %u\n", btn_addr, btn, value);
+    if (btn_addr == 0x43)
+    {
+      setLed(0x03, 1);
+    }
   }
 
   void
@@ -218,22 +231,5 @@ private:
     dbg("fbv: pedal = %u\n", value);
   }
 };
-
-// static const Fbv::c_fbv_note_table = {
-//     FBV_NOTE_PAK('C', 0),
-//     FBV_NOTE_PAK('D', 1),
-//     FBV_NOTE_PAK('D', 0),
-//     FBV_NOTE_PAK('E', 1),
-//     FBV_NOTE_PAK('E', 0),
-//     FBV_NOTE_PAK('F', 0),
-//     FBV_NOTE_PAK('F', 1),
-//     FBV_NOTE_PAK('G', 0),
-//     FBV_NOTE_PAK('A', 1),
-//     FBV_NOTE_PAK('A', 0),
-//     FBV_NOTE_PAK('B', 1),
-//     FBV_NOTE_PAK('B', 0),
-//     FBV_NOTE_PAK(' ', 0)
-//   };
-
 
 #endif

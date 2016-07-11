@@ -32,11 +32,11 @@ class Serial
 public:
   Serial(const char* dev)
   {
-    std::string cmd("setserial -v ");
-    cmd += dev;
-    cmd += " spd_cust divisor 768";
+    // std::string cmd("setserial -v ");
+    // cmd += dev;
+    // cmd += " spd_cust divisor 768";
 
-    std::system(cmd.c_str());
+    // std::system(cmd.c_str());
 
     //m_fd = open(dev, O_RDWR | O_NOCTTY | O_NONBLOCK);
     m_fd = open(dev, O_RDWR | O_NOCTTY);
