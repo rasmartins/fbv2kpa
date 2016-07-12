@@ -13,6 +13,12 @@ public:
     ACC_NATURAL
   };
 
+  Note(char name, Accidentals accidental):
+    m_name(name),
+    m_accidental(accidental),
+    m_octave(1)
+  { }
+
   char
   getName(void) const
   {

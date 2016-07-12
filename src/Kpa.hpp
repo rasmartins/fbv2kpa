@@ -1,38 +1,36 @@
+//***************************************************************************
+// This file is part of fbv2kpa.                                            *
+//***************************************************************************
+// fbv2kpa is free software: you can redistribute it and/or modify          *
+// it under the terms of the GNU General Public License as published by     *
+// the Free Software Foundation, either version 3 of the License, or        *
+// (at your option) any later version.                                      *
+//                                                                          *
+// fbv2kpa is distributed in the hope that it will be useful,               *
+// but WITHOUT ANY WARRANTY; without even the implied warranty of           *
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            *
+// GNU General Public License for more details.                             *
+//                                                                          *
+// You should have received a copy of the GNU General Public License        *
+// along with Foobar.  If not, see <http://www.gnu.org/licenses/>.          *
+//***************************************************************************
+
 #ifndef KPA_HPP_INCLUDED_
 #define KPA_HPP_INCLUDED_
 
-#include <stdint.h>
+// ISO C++ 11 headers.
+#include <cstdint>
 
+// Local headers.
 #include "Note.hpp"
-
-#define FBV_NOTE_PACK(note, sharp) (note | sharp << 7)
-#define FBV_NOTE_NAME(note_pak)    (note_pak & 0x7f)
-#define FBV_NOTE_SHARP(note_pak)   ((note_pak >> 7) != 0)
-
-const static uint8_t c_note_table[] =
-{
-  FBV_NOTE_PACK('C', 0),
-  FBV_NOTE_PACK('C', 1),
-  FBV_NOTE_PACK('D', 0),
-  FBV_NOTE_PACK('D', 1),
-  FBV_NOTE_PACK('E', 0),
-  FBV_NOTE_PACK('F', 0),
-  FBV_NOTE_PACK('F', 1),
-  FBV_NOTE_PACK('G', 0),
-  FBV_NOTE_PACK('G', 1),
-  FBV_NOTE_PACK('A', 0),
-  FBV_NOTE_PACK('A', 1),
-  FBV_NOTE_PACK('B', 0),
-  FBV_NOTE_PACK(' ', 0)
-};
-
 
 class Kpa
 {
 public:
   Kpa(Serial& uart):
     m_uart(uart),
-    m_state(KPA_STATE_ASENSE)
+    m_state(KPA_STATE_ASENSE),
+    m_note(getNoteByIndex(c_note_invalid_idx))
   { }
 
   void
@@ -41,8 +39,6 @@ public:
     uint8_t byte = 0;
     if (!m_uart.read(&byte))
       return;
-
-    //std::fprintf(stderr, " %02X", byte);
 
     switch (m_state)
     {
@@ -84,12 +80,49 @@ private:
     KPA_STATE_SYX,
   };
 
+  //! Index of the invalid note.
+  static const int c_note_invalid_idx = 12;
+
+  //! UART handle.
   Serial& m_uart;
   State m_state;
   uint8_t m_syx[128];
   size_t m_syx_idx;
-  Note m_note;
+  //! Current note.
+  Note& m_note;
+  //! Current tune value.
   int m_tuning;
+
+  Note&
+  getNoteByIndex(int index)
+  {
+    static Note note_table[] =
+    {
+      Note('C', Note::ACC_NATURAL),
+      Note('C', Note::ACC_SHARP),
+      Note('D', Note::ACC_NATURAL),
+      Note('D', Note::ACC_SHARP),
+      Note('E', Note::ACC_NATURAL),
+      Note('F', Note::ACC_NATURAL),
+      Note('F', Note::ACC_SHARP),
+      Note('G', Note::ACC_NATURAL),
+      Note('G', Note::ACC_SHARP),
+      Note('A', Note::ACC_NATURAL),
+      Note('A', Note::ACC_SHARP),
+      Note('B', Note::ACC_NATURAL),
+      Note(' ', Note::ACC_NATURAL)
+    };
+
+    Note& note = note_table[index];
+    return note;
+  }
+
+  void
+  saveCurrentNote(int index, int octave)
+  {
+    m_note = getNoteByIndex(index);
+    m_note.setOctave(octave);
+  }
 
   void
   handleSysEx(const uint8_t* data, size_t size)
@@ -106,7 +139,6 @@ private:
     else if (data[7] == 0x7C && data[8] == 0x0F)
     {
       onCurrentTuning(data, size);
-      requestCurrentNote();
     }
   }
 
@@ -136,6 +168,8 @@ private:
   void
   onCurrentTuning(const uint8_t* data, size_t size)
   {
+    requestCurrentNote();
+
     uint16_t value = (data[9] & 0x7F) << 7;
 
     if (size == 11)
@@ -155,12 +189,8 @@ private:
 
     uint8_t octave = (data[10] / 12) - 1;
     uint8_t note_idx = data[10] % 12;
-    uint8_t note_packed = c_note_table[note_idx];
 
-    m_note.setName(FBV_NOTE_NAME(note_packed));
-    m_note.setAccidental(FBV_NOTE_SHARP(note_packed) ? Note::ACC_SHARP : Note::ACC_NATURAL);
-    m_note.setOctave(octave);
-
+    saveCurrentNote(note_idx, octave);
     m_note.dump();
   }
 
