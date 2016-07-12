@@ -15,13 +15,33 @@
 // along with Foobar.  If not, see <http://www.gnu.org/licenses/>.          *
 //***************************************************************************
 
-#ifndef SERIAL_HPP_INCLUDED_
-#define SERIAL_HPP_INCLUDED_
+#ifndef SERIAL_CHIBIOS_HPP_INCLUDED_
+#define SERIAL_CHIBIOS_HPP_INCLUDED_
 
-#if defined(__linux__)
-#  include "SerialLinux.hpp"
-#elif defined(__arm__)
-#  include "SerialChibios.hpp"
-#endif
+#include <ch.h>
+#include <hal.h>
+
+class Serial
+{
+public:
+  Serial(BaseSequentialStream* stream):
+    m_stream(stream)
+  { }
+
+  int
+  read(unsigned char* b)
+  {
+    return chnRead(m_stream, b, 1);
+  }
+
+  int
+  write(unsigned char b)
+  {
+    return chnWrite(m_stream, &b, 1);
+  }
+
+private:
+  BaseSequenctialStream* m_stream;
+};
 
 #endif
