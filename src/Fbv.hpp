@@ -173,6 +173,25 @@ private:
   //! True if connected, false otherwise.
   bool m_connected;
 
+  const char*
+  getTunerNeedle(int value)
+  {
+    static const char* strings[] =
+    {
+      "  ))))          ",
+      "   )))          ",
+      "    ))          ",
+      "       **       ",
+      "          ((    ",
+      "          (((   ",
+      "          ((((  "
+    };
+
+    if (value < -3 || value > 3)
+      return "                ";
+
+    return strings[value + 3];
+  }
 
   void
   requestBoardType(void)

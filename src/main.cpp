@@ -91,16 +91,6 @@ loop_kpa(void* a)
 int
 main(void)
 {
-  const char* strings[] = {
-    "  ))))          ",
-    "   )))          ",
-    "    ))          ",
-    "       **       ",
-    "          ((    ",
-    "          (((   ",
-    "          ((((  "
-  };
-
   pthread_t thread;
   if (pthread_create(&thread, NULL, loop_kpa, NULL))
   {
