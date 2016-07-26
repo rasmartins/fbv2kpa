@@ -12,36 +12,18 @@
 // GNU General Public License for more details.                             *
 //                                                                          *
 // You should have received a copy of the GNU General Public License        *
-// along with Foobar.  If not, see <http://www.gnu.org/licenses/>.          *
+// along with fbv2kpa. If not, see <http://www.gnu.org/licenses/>.          *
 //***************************************************************************
 
-#ifndef SERIAL_CHIBIOS_HPP_INCLUDED_
-#define SERIAL_CHIBIOS_HPP_INCLUDED_
+#ifndef CLOCK_H_INCLUDED_
+#define CLOCK_H_INCLUDED_
 
-#include <ch.h>
-#include <hal.h>
+// ISO C headers.
+#include <stdint.h>
 
-class Serial
-{
-public:
-  Serial(BaseSequentialStream* stream):
-    m_stream(stream)
-  { }
-
-  int
-  read(unsigned char* b)
-  {
-    return chnRead(m_stream, b, 1);
-  }
-
-  int
-  write(unsigned char b)
-  {
-    return chnWrite(m_stream, &b, 1);
-  }
-
-private:
-  BaseSequenctialStream* m_stream;
-};
+//! Retrieve the number of milliseconds since power-up.
+//! @return milliseconds since power-up.
+uint32_t
+clock_get_ms(void);
 
 #endif

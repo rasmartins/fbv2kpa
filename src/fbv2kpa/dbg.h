@@ -15,13 +15,23 @@
 // along with Foobar.  If not, see <http://www.gnu.org/licenses/>.          *
 //***************************************************************************
 
-#ifndef SERIAL_HPP_INCLUDED_
-#define SERIAL_HPP_INCLUDED_
+#ifndef DBG_H_INCLUDED_
+#define DBG_H_INCLUDED_
 
 #if defined(__linux__)
-#  include "SerialLinux.hpp"
-#elif defined(__arm__)
-#  include "SerialChibios.hpp"
+#  include <stdio.h>
+#  define dbg(...)   fprintf(stderr, __VA_ARGS__)
+
+#elif defined(__chibios__)
+#  include <hal.h>
+#  include <ch.h>
+#  include <chprintf.h>
+#  include <usbcfg.h>
+#  define dbg(...)   chprintf((BaseSequentialStream *)&SDU1, __VA_ARGS__)
+
+#else
+#  define dbg(...)
+
 #endif
 
 #endif

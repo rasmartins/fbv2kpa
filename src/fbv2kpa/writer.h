@@ -12,33 +12,31 @@
 // GNU General Public License for more details.                             *
 //                                                                          *
 // You should have received a copy of the GNU General Public License        *
-// along with Foobar.  If not, see <http://www.gnu.org/licenses/>.          *
+// along with fbv2kpa. If not, see <http://www.gnu.org/licenses/>.          *
 //***************************************************************************
 
-#ifndef FBV_CONSTANTS_HPP_INCLUDED_
-#define FBV_CONSTANTS_HPP_INCLUDED_
+#ifndef WRITER_H_INCLUDED_
+#define WRITER_H_INCLUDED_
 
-//! Frame start byte.
-static const uint8_t c_fbv_frame_start = 0xF0;
-//! Maximum frame size.
-static const int c_fbv_frame_max_size = 64;
-
-enum CommandCode
+struct writer
 {
-  //! First request.
-  FBV_CCODE_REQ_FST = 0x90,
-  //! Second request.
-  FBV_CCODE_REQ_SEC = 0x30,
-  //! Button.
-  FBV_CCODE_BTN = 0x81,
-  //! Expression Pedal.
-  FBV_CCODE_EXP = 0x82,
+  void (*write)(void*, uint8_t);
+  void* object;
 };
 
-enum FbvCommandHostToDev
+typedef struct writer* writer_t;
+
+static inline void
+writer_init(writer_t writer, void* object, void (*write)(void*, uint8_t))
 {
-  FBV_SET_LED  = 0x04,
-  FBV_SET_FLAT = 0x20
-};
+  writer->write = write;
+  writer->object = object;
+}
+
+static inline void
+writer_write(writer_t writer, uint8_t byte)
+{
+  writer->write(writer->object, byte);
+}
 
 #endif
